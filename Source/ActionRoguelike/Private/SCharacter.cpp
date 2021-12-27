@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "SInteractionComponent.h"
 
 
 // Sets default values
@@ -24,6 +25,8 @@ ASCharacter::ASCharacter()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 
 	// Will rotate the character to whatever direction we are moving towards
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -90,8 +93,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		(3) Our character is the user object
 		(4) The function to be called */
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-	
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
+
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -143,8 +147,17 @@ void ASCharacter::PrimaryAttack()
 		<> AActor is the type we are spawning,
 		(1) Exposing an asset as a parameter,
 		(2) A transform (Spawn transform matrix),
-		(3) Optional spawn parameters */
+		(3) Optional spawn parameters
+	*/
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+}
+
+void ASCharacter::PrimaryInteract()
+{
+	if (InteractionComponent)
+	{
+		InteractionComponent->PrimaryInteract();
+	}
 }
 
 void ASCharacter::Jump()
