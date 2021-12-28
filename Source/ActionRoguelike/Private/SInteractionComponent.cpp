@@ -88,17 +88,15 @@ void USInteractionComponent::PrimaryInteract()
 				APawn* MyPawn = Cast<APawn>(MyOwner); // Casting our owner from an AActor to an APawn
 
 				/* Function Arguments
-				(1) The object we want to call Execute_Interact (Interact()) on
-				(2) The owner/instigator
-			 */
+				    (1) The object we want to call Execute_Interact (Interact()) on
+				    (2) The owner/instigator
+			    */
 				ISGameplayInterface::Execute_Interact(HitActor, MyPawn);
 				break;
 			}
 		}
 		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
 	}
-
-	
 	DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
 }
 

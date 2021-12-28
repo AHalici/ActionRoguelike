@@ -75,7 +75,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	/* Function Arguments
 		(1) Name of action
 		(2) Whoever owns this input
-		(3) The function we want to have triggered when we have the key pressed */
+		(3) The function we want to have triggered when we have the key pressed
+	*/
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
 	
 	// Same thing but with right and left movement
@@ -91,7 +92,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		(1) Name of action
 		(2) Trigger (key press)
 		(3) Our character is the user object
-		(4) The function to be called */
+		(4) The function to be called
+	*/
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
 
@@ -132,6 +134,14 @@ void ASCharacter::MoveRight(float Value)
 }
 
 void ASCharacter::PrimaryAttack()
+{
+	PlayAnimMontage(AttackAnim);
+	
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackDelay);
+	//GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	// Get mesh of our character, then get a socket location(grey in Unreal editor, white are bones (Maya, Blender))
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
