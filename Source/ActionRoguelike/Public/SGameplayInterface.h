@@ -30,7 +30,7 @@ public:
 	/* Function Parameters
 		(1) The pawn that triggered the interact (ex: Who used the health potion)
 	*/
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Interact(APawn* InstigatorPawn);
 };
 

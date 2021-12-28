@@ -154,9 +154,9 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
 	/* Function Arguments
-		<> AActor is the type we are spawning,
-		(1) Exposing an asset as a parameter,
-		(2) A transform (Spawn transform matrix),
+		<> AActor is the type we are spawning
+		(1) Exposing an asset as a parameter
+		(2) A transform (Spawn transform matrix)
 		(3) Optional spawn parameters
 	*/
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
