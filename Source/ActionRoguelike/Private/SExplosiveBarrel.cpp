@@ -3,6 +3,7 @@
 
 #include "SExplosiveBarrel.h"
 
+#include "DrawDebugHelpers.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 // Sets default values
@@ -44,6 +45,15 @@ void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ForceComp->FireImpulse();
+
+	UE_LOG(LogTemp, Log, TEXT("OnActorHit in Explosive Barrel"));
+	
+	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, at game time: %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds); // GetNameSafe() Checks if the actor is null before getting name
+
+	FString CombineString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+
+	// Draw in 3D in the viewport
+	DrawDebugString(GetWorld(), Hit.ImpactPoint, CombineString, nullptr, FColor::Green, 2.0f, true);
 }
 
 
