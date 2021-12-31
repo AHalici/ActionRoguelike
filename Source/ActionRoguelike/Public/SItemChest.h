@@ -23,7 +23,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly) // BlueprintReadOnly allows us to use this in the event graph of the treasure chest blueprint
 	UStaticMeshComponent* LidMesh;
 
 	// Called when the game starts or when spawned

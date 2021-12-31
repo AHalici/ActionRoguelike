@@ -152,6 +152,7 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 	FActorSpawnParameters SpawnParams;
 	// Spawn collision handling checks if the actor can move a little to avoid collision when they spawn, but since we are spawning the projectile on our character, we don't want any problems for now
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this; // So we know who shot the projectile
 	
 	/* Function Arguments
 		<> AActor is the type we are spawning

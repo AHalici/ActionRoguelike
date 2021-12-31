@@ -22,10 +22,10 @@ public:
 
 protected:
 
+	FTimerHandle TimerHandle_PrimaryAttack;
+
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	float PrimaryAttackDelay = 0.15f;
-	
-	FTimerHandle TimerHandle_PrimaryAttack;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
