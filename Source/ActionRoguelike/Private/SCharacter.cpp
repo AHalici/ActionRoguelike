@@ -7,7 +7,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SInteractionComponent.h"
 
-
 // Sets default values
 ASCharacter::ASCharacter()
 {
@@ -144,24 +143,56 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	// Get mesh of our character, then get a socket location(grey in Unreal editor, white are bones (Maya, Blender))
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	
-	// Our SpawnTM (Spawn Transform Matrix) is the transform for the projectile we will spawn
-	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
-	
-	FActorSpawnParameters SpawnParams;
-	// Spawn collision handling checks if the actor can move a little to avoid collision when they spawn, but since we are spawning the projectile on our character, we don't want any problems for now
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this; // So we know who shot the projectile
-	
-	/* Function Arguments
-		<> AActor is the type we are spawning
-		(1) Exposing an asset as a parameter
-		(2) A transform (Spawn transform matrix)
-		(3) Optional spawn parameters
-	*/
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	if (ensureAlways(ProjectileClass))
+	{
+		// Get mesh of our character, then get a socket location(grey in Unreal editor, white are bones (Maya, Blender))
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		
+		FActorSpawnParameters SpawnParams;
+		// Spawn collision handling checks if the actor can move a little to avoid collision when they spawn, but since we are spawning the projectile on our character, we don't want any problems for now
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this; // So we know who shot the projectile
+
+		FCollisionShape Shape;
+		Shape.SetSphere(20.0f);
+
+		// Ignore Player
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+		FCollisionObjectQueryParams ObjParams;
+		ObjParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		ObjParams.AddObjectTypesToQuery(ECC_WorldStatic);
+		ObjParams.AddObjectTypesToQuery(ECC_Pawn);
+
+		FVector TraceStart = CameraComp->GetComponentLocation();
+
+		// Endpoint far into the look-at distance (not too far, still adjust somewhat towards crosshair on a miss)
+		FVector TraceEnd = CameraComp->GetComponentLocation() + GetControlRotation().Vector() * 5000;
+
+		FHitResult Hit;
+		// Returns true if we got to a blocking hit
+		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjParams, Shape, Params))
+		{
+			// Overwrite trace end with impact point in world
+			TraceEnd = Hit.ImpactPoint;
+		}
+
+		// Find new direction/rotation from Hand pointing to impact point in world
+		FRotator ProjRotation = FRotationMatrix::MakeFromX(TraceEnd - HandLocation).Rotator();
+		
+		
+		// Our SpawnTM (Spawn Transform Matrix) is the transform for the projectile we will spawn
+		FTransform SpawnTM = FTransform(ProjRotation, HandLocation);
+		
+		/* Function Arguments
+			<> AActor is the type we are spawning
+			(1) Exposing an asset as a parameter
+			(2) A transform (Spawn transform matrix)
+			(3) Optional spawn parameters
+		*/
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	}
 }
 
 void ASCharacter::PrimaryInteract()
