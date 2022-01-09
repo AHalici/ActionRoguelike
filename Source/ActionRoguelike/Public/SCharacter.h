@@ -22,14 +22,6 @@ public:
 	ASCharacter();
 
 protected:
-
-	FTimerHandle TimerHandle_PrimaryAttack;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	float PrimaryAttackDelay = 0.15f;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnim;
 	
 	// This lets us assign a class
 	UPROPERTY(EditAnywhere, Category = "Attack")
@@ -37,6 +29,19 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> BlackHoleProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> DashProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+    UAnimMontage* AttackAnim;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_BlackHoleAttack;
+	FTimerHandle TimerHandle_Dash;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	float AttackAnimDelay;
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -56,18 +61,26 @@ protected:
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
-	
+
+	void Jump();
+
+	void PrimaryInteract();
+
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
+
 	void PrimaryAttack();
 
 	void PrimaryAttack_TimeElapsed();
 
-	void BlackHoleAbility();
-	
-	void BlackHoleAbility_TimeElapsed();
+	void BlackHoleAttack();
 
-	void PrimaryInteract();
+	void BlackHoleAttack_TimeElapsed();
 
-	void Jump();
+	void Dash();
+
+	void Dash_TimeElapsed();
+
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

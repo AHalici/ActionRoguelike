@@ -5,6 +5,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "SGameplayInterface.h"
+#include "Particles/Camera/ParticleModuleCameraOffset.h"
 
 // Sets default values for this component's properties
 
@@ -49,6 +50,9 @@ void USInteractionComponent::PrimaryInteract()
 	FRotator EyeRotation;
 	MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
+	FVector CameraOffset(0, 60, 0);
+	EyeLocation += CameraOffset;
+
 	FVector End = EyeLocation + (EyeRotation.Vector() * 1000); // Extending the end of the line trace in the direction we are looking by 1000 units (1000 cm)
 	
 	//FHitResult Hit;
@@ -69,7 +73,8 @@ void USInteractionComponent::PrimaryInteract()
 	
 	FCollisionShape Shape;
 	Shape.SetSphere(30.0f);
-
+	
+	
 	// A sweep is when in physics, a sphere is projected from start point to end point to see overlaps and to see where it's first blocking hit is on it's radius
 		// FQuat::Identity is a quaternion and default rotation / no rotation
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, ObjectQueryParams, Shape);
