@@ -6,12 +6,16 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 
 
+
 ASDashProjectile::ASDashProjectile()
 {
 	TeleportDelay = 0.2f;
 	DetonateDelay = 0.2f;
 
 	MoveComp->InitialSpeed = 6000.0f;
+
+	DashEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("DashEffectComp");
+	DashEffectComp->SetupAttachment(RootComponent);
 }
 
 
@@ -31,7 +35,7 @@ void ASDashProjectile::Explode_Implementation()
 
 	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
 
-	//EffectComp->DeactivateSystem();
+	EffectComp->DeactivateSystem();
 
 	MoveComp->StopMovementImmediately(); // Stop movement so we teleport accurately
 	SetActorEnableCollision(false); // Disable collision

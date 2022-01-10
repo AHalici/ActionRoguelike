@@ -4,7 +4,8 @@
 #include "SMagicProjectile.h"
 #include "SAttributeComponent.h"
 #include "Components/SphereComponent.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 ASMagicProjectile::ASMagicProjectile()
@@ -12,6 +13,9 @@ ASMagicProjectile::ASMagicProjectile()
 	SphereComp->SetSphereRadius(20.0f);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASMagicProjectile::OnActorOverlap); // Ignores collision with the player character
 
+	ExtraEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("ExtraEffectComp");
+	ExtraEffectComp->SetupAttachment(RootComponent);
+	
 	DamageAmount = 20.0f;
 }
 

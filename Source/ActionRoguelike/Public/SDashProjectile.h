@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
 	float DetonateDelay;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UParticleSystemComponent* DashEffectComp;
+	
 	// Handle to cancel timer if we already hit something
 	FTimerHandle TimerHandle_DelayedDetonate;
 
