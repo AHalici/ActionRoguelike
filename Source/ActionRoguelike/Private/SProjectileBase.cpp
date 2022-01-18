@@ -31,7 +31,7 @@ ASProjectileBase::ASProjectileBase()
 
 
 void ASProjectileBase::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	FVector NormalImpusle, const FHitResult& Hit)
+	FVector NormalImpulse, const FHitResult& Hit)
 {
 	Explode();
 }

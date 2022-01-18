@@ -172,7 +172,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		FVector TraceEnd = CameraComp->GetComponentLocation() + (GetControlRotation().Vector() * 5000);
 		
 		FCollisionShape Shape;
-		Shape.SetSphere(20.0f);
+		Shape.SetSphere(5.0f);
 
 		// Ignore Player
 		FCollisionQueryParams Params;

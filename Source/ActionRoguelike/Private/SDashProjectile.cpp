@@ -9,13 +9,13 @@
 
 ASDashProjectile::ASDashProjectile()
 {
+	DashEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("DashEffectComp");
+	DashEffectComp->SetupAttachment(RootComponent);
+	
 	TeleportDelay = 0.2f;
 	DetonateDelay = 0.2f;
 
 	MoveComp->InitialSpeed = 6000.0f;
-
-	DashEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("DashEffectComp");
-	DashEffectComp->SetupAttachment(RootComponent);
 }
 
 
@@ -52,8 +52,11 @@ void ASDashProjectile::TeleportInstigator()
 	AActor* ActorToTeleport = GetInstigator();
 	if (ensure(ActorToTeleport))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Actor location before teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
 		// Keep instigator rotation or it may end up jarring
 		ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, false);
+
+		UE_LOG(LogTemp, Warning, TEXT("Actor location after teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
 	}
 }
 
