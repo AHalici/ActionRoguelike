@@ -52,11 +52,18 @@ void ASDashProjectile::TeleportInstigator()
 	AActor* ActorToTeleport = GetInstigator();
 	if (ensure(ActorToTeleport))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor location before teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Actor location before teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
 		// Keep instigator rotation or it may end up jarring
 		ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, false);
-
-		UE_LOG(LogTemp, Warning, TEXT("Actor location after teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
+		if (ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation(), false, false))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Teleport SUCCESS <---------------------"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Teleport FAILED <---------------------"));
+		}
+		//UE_LOG(LogTemp, Warning, TEXT("Actor location after teleporting: %s"), *ActorToTeleport->GetActorLocation().ToString());
 	}
 }
 
